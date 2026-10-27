@@ -189,195 +189,198 @@ function LitParametres()
   pid('TxtTaillePolice').value = param;
   ChangeTaillePolice();
 
-  //--- Parking ---
-  // Coche
-  param = localStorage.getItem('BoutonParking');
-  if (param == null)
-    param = "1";
-  pid('ChkParking').checked = (param=="1"?true:false);
-  pid('DivParking').style.display = (param=="1"?'block':'none');
+  if (0) // TODO
+  {
+    //--- Parking ---
+    // Coche
+    param = localStorage.getItem('BoutonParking');
+    if (param == null)
+      param = "1";
+    pid('ChkParking').checked = (param=="1"?true:false);
+    pid('DivParking').style.display = (param=="1"?'block':'none');
 
-  // Bouton
-  param = localStorage.getItem('TexteBoutonParking');
-  if (param == null)
-      param = "Parking";
-  pid('TxtBoutonParking').value = param;
-  pid('ButParking').innerHTML = param;
+    // Bouton
+    param = localStorage.getItem('TexteBoutonParking');
+    if (param == null)
+        param = "Parking";
+    pid('TxtBoutonParking').value = param;
+    pid('ButParking').innerHTML = param;
 
-  // Texte
-  param = localStorage.getItem('TexteParking');
-  if (param == null)
-      param = "Emplacement de la voiture";
-  pid('TxtParking').value = param;
-  pid('TxtButParking').innerHTML = param;
+    // Texte
+    param = localStorage.getItem('TexteParking');
+    if (param == null)
+        param = "Emplacement de la voiture";
+    pid('TxtParking').value = param;
+    pid('TxtButParking').innerHTML = param;
 
-  // Icone
-  param = localStorage.getItem('srcParkingImg');
-  if (param == null)
-      param = "poi_park.png";
-  pid('poiParkingImg').src = param;
+    // Icone
+    param = localStorage.getItem('srcParkingImg');
+    if (param == null)
+        param = "poi_park.png";
+    pid('poiParkingImg').src = param;
 
-  //--- Postion ---
-  // Coche
-  param = localStorage.getItem('BoutonPosition');
-  if (param == null)
-    param = "1";
-  pid('ChkPosition').checked = (param=="1"?true:false);
-  pid('DivPosition').style.display = (param=="1"?'block':'none');
+    //--- Postion ---
+    // Coche
+    param = localStorage.getItem('BoutonPosition');
+    if (param == null)
+      param = "1";
+    pid('ChkPosition').checked = (param=="1"?true:false);
+    pid('DivPosition').style.display = (param=="1"?'block':'none');
 
-  // Bouton
-  param = localStorage.getItem('TexteBoutonPosition');
-  if (param == null)
-      param = "Position";
-  pid('TxtBoutonPosition').value = param;
-  pid('ButPosition').innerHTML = param;
+    // Bouton
+    param = localStorage.getItem('TexteBoutonPosition');
+    if (param == null)
+        param = "Position";
+    pid('TxtBoutonPosition').value = param;
+    pid('ButPosition').innerHTML = param;
 
-  // Texte
-  param = localStorage.getItem('TextePosition');
-  if (param == null)
-      param = "Position actuelle";
-  pid('TxtPosition').value = param;
-  pid('TxtButPosition').innerHTML = param;
+    // Texte
+    param = localStorage.getItem('TextePosition');
+    if (param == null)
+        param = "Position actuelle";
+    pid('TxtPosition').value = param;
+    pid('TxtButPosition').innerHTML = param;
 
-  // Icone
-  param = localStorage.getItem('srcPositionImg');
-  if (param == null)
-      param = "poi_person.png";
-  pid('poiPositionImg').src = param;
+    // Icone
+    param = localStorage.getItem('srcPositionImg');
+    if (param == null)
+        param = "poi_person.png";
+    pid('poiPositionImg').src = param;
 
-  //--- Hors Iti ---
-  // Coche
-  param = localStorage.getItem('BoutonHorsIti');
-  if (param == null)
-    param = "1";
-  pid('ChkHorsIti').checked = (param=="1"?true:false);
-  pid('DivHorsIti').style.display = (param=="1"?'block':'none');
+    //--- Hors Iti ---
+    // Coche
+    param = localStorage.getItem('BoutonHorsIti');
+    if (param == null)
+      param = "1";
+    pid('ChkHorsIti').checked = (param=="1"?true:false);
+    pid('DivHorsIti').style.display = (param=="1"?'block':'none');
 
-  // Bouton
-  param = localStorage.getItem('TexteBoutonHorsIti');
-  if (param == null)
-      param = "HI";
-  pid('TxtBoutonHorsIti').value = param;
-  pid('ButHorsIti').innerHTML = param;
+    // Bouton
+    param = localStorage.getItem('TexteBoutonHorsIti');
+    if (param == null)
+        param = "HI";
+    pid('TxtBoutonHorsIti').value = param;
+    pid('ButHorsIti').innerHTML = param;
 
-  // Texte
-  param = localStorage.getItem('TexteHorsIti');
-  if (param == null)
-      param = "Hors Itinéraire";
-  pid('TxtHorsIti').value = param;
-  pid('TxtButHorsIti').innerHTML = param;
+    // Texte
+    param = localStorage.getItem('TexteHorsIti');
+    if (param == null)
+        param = "Hors Itinéraire";
+    pid('TxtHorsIti').value = param;
+    pid('TxtButHorsIti').innerHTML = param;
 
-  // Icone
-  param = localStorage.getItem('srcHorsItiImg');
-  if (param == null)
-      param = "poi___.png";
-  pid('poiHorsItiImg').src = param;
+    // Icone
+    param = localStorage.getItem('srcHorsItiImg');
+    if (param == null)
+        param = "poi___.png";
+    pid('poiHorsItiImg').src = param;
 
-  //--- Variante ---
-  // Coche
-  param = localStorage.getItem('BoutonVariante');
-  if (param == null)
-    param = "0";  // Pour rétrocompatibilité
-  pid('ChkVariante').checked = (param=="1"?true:false);
-  pid('DivVariante').style.display = (param=="1"?'block':'none');
+    //--- Variante ---
+    // Coche
+    param = localStorage.getItem('BoutonVariante');
+    if (param == null)
+      param = "0";  // Pour rétrocompatibilité
+    pid('ChkVariante').checked = (param=="1"?true:false);
+    pid('DivVariante').style.display = (param=="1"?'block':'none');
 
-  // Bouton
-  param = localStorage.getItem('TexteBoutonVariante');
-  if (param == null)
-      param = "Variante";
-  pid('TxtBoutonVariante').value = param;
-  pid('ButVariante').innerHTML = param;
+    // Bouton
+    param = localStorage.getItem('TexteBoutonVariante');
+    if (param == null)
+        param = "Variante";
+    pid('TxtBoutonVariante').value = param;
+    pid('ButVariante').innerHTML = param;
 
-  // Texte
-  param = localStorage.getItem('TexteVariante');
-  if (param == null)
-      param = "Itinéraire Variante";
-  pid('TxtVariante').value = param;
-  pid('TxtButVariante').innerHTML = param;
+    // Texte
+    param = localStorage.getItem('TexteVariante');
+    if (param == null)
+        param = "Itinéraire Variante";
+    pid('TxtVariante').value = param;
+    pid('TxtButVariante').innerHTML = param;
 
-  // Icone
-  param = localStorage.getItem('srcVarianteImg');
-  if (param == null)
-      param = "poi_dirLeft.png";
-  pid('poiVarianteImg').src = param;
+    // Icone
+    param = localStorage.getItem('srcVarianteImg');
+    if (param == null)
+        param = "poi_dirLeft.png";
+    pid('poiVarianteImg').src = param;
 
-  //--- Repas ---
-  // Coche
-  param = localStorage.getItem('BoutonRepas');
-  if (param == null)
-    param = "1";
-  pid('ChkRepas').checked = (param=="1"?true:false);
-  pid('DivRepas').style.display = (param=="1"?'block':'none');
+    //--- Repas ---
+    // Coche
+    param = localStorage.getItem('BoutonRepas');
+    if (param == null)
+      param = "1";
+    pid('ChkRepas').checked = (param=="1"?true:false);
+    pid('DivRepas').style.display = (param=="1"?'block':'none');
 
-  // Bouton
-  param = localStorage.getItem('TexteBoutonRepas');
-  if (param == null)
-      param = "Repas";
-  pid('TxtBoutonRepas').value = param;
-  pid('ButRepas').innerHTML = param;
+    // Bouton
+    param = localStorage.getItem('TexteBoutonRepas');
+    if (param == null)
+        param = "Repas";
+    pid('TxtBoutonRepas').value = param;
+    pid('ButRepas').innerHTML = param;
 
-  // Texte
-  param = localStorage.getItem('TexteRepas');
-  if (param == null)
-      param = "Emplacement du repas";
-  pid('TxtRepas').value = param;
-  pid('TxtButRepas').innerHTML = param;
+    // Texte
+    param = localStorage.getItem('TexteRepas');
+    if (param == null)
+        param = "Emplacement du repas";
+    pid('TxtRepas').value = param;
+    pid('TxtButRepas').innerHTML = param;
 
-  // Icone
-  param = localStorage.getItem('srcRepasImg');
-  if (param == null)
-      param = "poi_restaurant.png";
-  pid('poiRepasImg').src = param;
+    // Icone
+    param = localStorage.getItem('srcRepasImg');
+    if (param == null)
+        param = "poi_restaurant.png";
+    pid('poiRepasImg').src = param;
 
-  //--- Bivouac ---
-  // Coche
-  param = localStorage.getItem('BoutonBivouac');
-  if (param == null)
-    param = "1";
-  pid('ChkBivouac').checked = (param=="1"?true:false);
-  pid('DivBivouac').style.display = (param=="1"?'block':'none');
+    //--- Bivouac ---
+    // Coche
+    param = localStorage.getItem('BoutonBivouac');
+    if (param == null)
+      param = "1";
+    pid('ChkBivouac').checked = (param=="1"?true:false);
+    pid('DivBivouac').style.display = (param=="1"?'block':'none');
 
-  // Bouton
-  param = localStorage.getItem('TexteBoutonBivouac');
-  if (param == null)
-      param = "Bivouac";
-  pid('TxtBoutonBivouac').value = param;
-  pid('ButBivouac').innerHTML = param;
+    // Bouton
+    param = localStorage.getItem('TexteBoutonBivouac');
+    if (param == null)
+        param = "Bivouac";
+    pid('TxtBoutonBivouac').value = param;
+    pid('ButBivouac').innerHTML = param;
 
-  // Texte
-  param = localStorage.getItem('TexteBivouac');
-  if (param == null)
-      param = "Emplacement du bivouac";
-  pid('TxtBivouac').value = param;
-  pid('TxtButBivouac').innerHTML = param;
+    // Texte
+    param = localStorage.getItem('TexteBivouac');
+    if (param == null)
+        param = "Emplacement du bivouac";
+    pid('TxtBivouac').value = param;
+    pid('TxtButBivouac').innerHTML = param;
 
-  // Icone
-  param = localStorage.getItem('srcBivouacImg');
-  if (param == null)
-      param = "poi_camping.png";
-  pid('poiBivouacImg').src = param;
+    // Icone
+    param = localStorage.getItem('srcBivouacImg');
+    if (param == null)
+        param = "poi_camping.png";
+    pid('poiBivouacImg').src = param;
 
-  //--- Mémo ---
-  // Coche
-  param = localStorage.getItem('BoutonMemo');
-  if (param == null)
-    param = "1";
-  pid('ChkMemo').checked = (param=="1"?true:false);
-  pid('DivMemo').style.display = (param=="1"?'block':'none');
+    //--- Mémo ---
+    // Coche
+    param = localStorage.getItem('BoutonMemo');
+    if (param == null)
+      param = "1";
+    pid('ChkMemo').checked = (param=="1"?true:false);
+    pid('DivMemo').style.display = (param=="1"?'block':'none');
 
-  // Bouton
-  param = localStorage.getItem('TexteBoutonMemo');
-  if (param == null)
-      param = "Mémo";
-  pid('TxtBoutonMemo').value = param;
-  pid('ButMemo').innerHTML = param;
+    // Bouton
+    param = localStorage.getItem('TexteBoutonMemo');
+    if (param == null)
+        param = "Mémo";
+    pid('TxtBoutonMemo').value = param;
+    pid('ButMemo').innerHTML = param;
 
-  // Texte
-  param = localStorage.getItem('TexteMemo');
-  if (param == null)
-      param = "Mémorisation d'un message";
-  pid('TxtMemo').value = param;
-  pid('TxtButMemo').innerHTML = param;
+    // Texte
+    param = localStorage.getItem('TexteMemo');
+    if (param == null)
+        param = "Mémorisation d'un message";
+    pid('TxtMemo').value = param;
+    pid('TxtButMemo').innerHTML = param;
+  }
 }
 
 //-------------------------------------------------------

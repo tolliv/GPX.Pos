@@ -88,7 +88,7 @@ body
   margin-top: -5px;
   margin-bottom: 2px;
   border-radius: 10px;
-  background-color: #008;
+  background-color: #444;
   color: white;
   border: 1px solid #222;
   border-shadow: none;
@@ -102,7 +102,7 @@ body
   resize: none;
 }
 
-#ButParking
+#ButActiviteDebut
 {
   width: 90px;
   padding: 10px;
@@ -110,7 +110,7 @@ body
   box-sizing: border-box;
   border-radius: 20px;
   display: inline-block;
-  background-color: lightblue;
+  background-color: #0F0;
   color: black;
   font-size: 14px;
   border: 1px solid #222;
@@ -125,8 +125,8 @@ body
   box-sizing: border-box;
   border-radius: 20px;
   display: inline-block;
-  background-color: lightgreen;
-  color: black;
+  background-color: #008;
+  color: white;
   font-size: 14px;
   border: 1px solid #222;
   border-shadow: none;
@@ -162,21 +162,6 @@ body
   border-shadow: none;
 }
 
-#ButRepas
-{
-  width:90px;
-  padding: 10px;
-  margin: 5px;
-  box-sizing: border-box;
-  border-radius: 20px;
-  display: inline-block;
-  background-color: yellow;
-  color: black;
-  font-size: 14px;
-  border: 1px solid #222;
-  border-shadow: none;
-}
-
 #ButBivouac
 {
   width: 90px;
@@ -185,8 +170,23 @@ body
   box-sizing: border-box;
   border-radius: 20px;
   display: inline-block;
-  background-color: orange;
-  color: black;
+  background: #83A;
+  color: white;
+  font-size: 14px;
+  border: 1px solid #222;
+  border-shadow: none;
+}
+
+#ButActiviteFin
+{
+  width:90px;
+  padding: 10px;
+  margin: 5px;
+  box-sizing: border-box;
+  border-radius: 20px;
+  display: inline-block;
+  background-color: #F00;
+  color: white;
   font-size: 14px;
   border: 1px solid #222;
   border-shadow: none;
