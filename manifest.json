@@ -1,6 +1,6 @@
 {
-  "name": "VisuGPX.Pos",
-  "short_name": "VisuGPX.Pos",
+  "name": "GPX.Pos",
+  "short_name": "GPX.Pos",
   "start_url": "index.html",
   "display": "standalone",
   "background_color": "#ffffff",

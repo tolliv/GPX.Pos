@@ -88,7 +88,7 @@ function AfficherEcranHOME()
   let lNbReq = 0;
 
   // Gestion du nombre de requêtes en cours
-  const lReq = localStorage.getItem('RequetesVisuGPX');
+  const lReq = localStorage.getItem('RequetesGPX.Pos');
   if (lReq != null)
   {
     lNbReq = CompteRequetes(lReq);

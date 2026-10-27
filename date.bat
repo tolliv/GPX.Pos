@@ -7,9 +7,8 @@ set "filename=version.js"
 set "suffix="
 set "alphabet=ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
-:: 1. Extraction de la date (AAMM.JJ)
-for /f "tokens=2 delims==" %%I in ('wmic os get localdatetime /value') do set datetime=%%I
-set base_version=%datetime:~2,2%%datetime:~4,2%.%datetime:~6,2%
+:: 1. Extraction de la date (AAMM.JJ) via PowerShell
+for /f "usebackq" %%i in (`powershell -NoProfile -Command "Get-Date -Format 'yyMM.dd'"`) do set base_version=%%i
 
 :: 2. Vérification version actuelle
 set /p current_line=<%filename%
