@@ -76,6 +76,8 @@
   overflow: hidden;
   cursor: pointer;
   background-image: url('imgGauche.png');
+  border: 1px solid #222;
+  border-shadow: none;
 }
 
 #ButMeteoGPSNew
@@ -89,6 +91,8 @@
   overflow: hidden;
   cursor: pointer;
   background-image: url('imgNewGPSBulletin.png');
+  border: 1px solid #222;
+  border-shadow: none;
 }
 
 #ButChoixEmplacement
@@ -103,6 +107,8 @@
   overflow: hidden;
   cursor: pointer;
   font-size: 20px;
+  border: 1px solid #222;
+  border-shadow: none;
 }
 
 #ButGestionEmplacements
@@ -117,6 +123,8 @@
   overflow: hidden;
   cursor: pointer;
   background-image: url('imgEmplacements.png');
+  border: 1px solid #222;
+  border-shadow: none;
 }
 
 /*------------------------------------------------------------------------------------------------*/

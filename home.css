@@ -43,6 +43,8 @@ body
   background-color: black;
   overflow: hidden;
   cursor: pointer;
+  border: 1px solid #222;
+  border-shadow: none;
 }
 
 #ButMenuParam
@@ -88,6 +90,8 @@ body
   border-radius: 10px;
   background-color: #008;
   color: white;
+  border: 1px solid #222;
+  border-shadow: none;
 }
 
 #TxtMessage
@@ -109,6 +113,8 @@ body
   background-color: lightblue;
   color: black;
   font-size: 14px;
+  border: 1px solid #222;
+  border-shadow: none;
 }
 
 #ButPosition
@@ -122,58 +128,8 @@ body
   background-color: lightgreen;
   color: black;
   font-size: 14px;
-}
-
-#ButRepas
-{
-  width:90px;
-  padding: 10px;
-  margin: 5px;
-  box-sizing: border-box;
-  border-radius: 20px;
-  display: inline-block;
-  background-color: yellow;
-  color: black;
-  font-size: 14px;
-}
-
-#ButBivouac
-{
-  width: 90px;
-  padding: 10px;
-  margin: 5px;
-  box-sizing: border-box;
-  border-radius: 20px;
-  display: inline-block;
-  background-color: orange;
-  color: black;
-  font-size: 14px;
-}
-
-#ButVariante
-{
-  width: 90px;
-  padding: 10px;
-  margin: 5px;
-  box-sizing: border-box;
-  border-radius: 20px;
-  display: inline-block;
-  background-color: purple;
-  color: white;
-  font-size: 14px;
-}
-
-#ButMemo
-{
-  width: 90px;
-  padding: 10px;
-  margin: 5px;
-  box-sizing: border-box;
-  border-radius: 20px;
-  display: inline-block;
-  background-color: #FCC;
-  color: black;
-  font-size: 14px;
+  border: 1px solid #222;
+  border-shadow: none;
 }
 
 #ButHorsIti
@@ -187,6 +143,68 @@ body
   background-color: #080;
   color: white;
   font-size: 14px;
+  border: 1px solid #222;
+  border-shadow: none;
+}
+
+#ButVariante
+{
+  width: 90px;
+  padding: 10px;
+  margin: 5px;
+  box-sizing: border-box;
+  border-radius: 20px;
+  display: inline-block;
+  background-color: purple;
+  color: white;
+  font-size: 14px;
+  border: 1px solid #222;
+  border-shadow: none;
+}
+
+#ButRepas
+{
+  width:90px;
+  padding: 10px;
+  margin: 5px;
+  box-sizing: border-box;
+  border-radius: 20px;
+  display: inline-block;
+  background-color: yellow;
+  color: black;
+  font-size: 14px;
+  border: 1px solid #222;
+  border-shadow: none;
+}
+
+#ButBivouac
+{
+  width: 90px;
+  padding: 10px;
+  margin: 5px;
+  box-sizing: border-box;
+  border-radius: 20px;
+  display: inline-block;
+  background-color: orange;
+  color: black;
+  font-size: 14px;
+  border: 1px solid #222;
+  border-shadow: none;
+}
+
+#ButMemo
+{
+  width: 90px;
+  padding: 10px;
+  margin: 5px;
+  box-sizing: border-box;
+  border-radius: 20px;
+  display: inline-block;
+  background-color: #FCC;
+  color: black;
+  font-size: 14px;
+  border: 1px solid #222;
+  border-shadow: none;
 }
 
 #scrHome

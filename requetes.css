@@ -26,6 +26,8 @@
   overflow: hidden;
   cursor: pointer;
   background-image: url('imgGauche.png');
+  border: 1px solid #222;
+  border-shadow: none;
 }
 
 #TxtRequetes
@@ -42,6 +44,8 @@
   border-radius: 20px;
   background-color: red;
   color: white;
+  border: 1px solid #222;
+  border-shadow: none;
 }
 
 #ButEnvoiRequetes
@@ -53,4 +57,6 @@
   border-radius: 20px;
   background-color: #008;
   color: white;
+  border: 1px solid #222;
+  border-shadow: none;
 }

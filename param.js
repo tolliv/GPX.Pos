@@ -37,7 +37,9 @@ function ButParamValiderClick()
   else if  (pid('RadEcmwf').checked) lModele = 4;
 
 
-  localStorage.setItem('VisuGPX', pid('TxtVisuGPX').value);
+  localStorage.setItem('TxtURL', pid('TxtURL').value);
+  localStorage.setItem('TxtKEY', pid('TxtKEY').value);
+  localStorage.setItem('TxtUSER', pid('TxtUSER').value);
   localStorage.setItem('Precision', pid('TxtPrecision').value);
   localStorage.setItem('TempsMaxLocalisation', pid('TxtTempsMaxLocalisation').value);
   localStorage.setItem('SimulationGeolocalisation', (pid('ChkSimulation').checked?"1":"0"));
@@ -94,12 +96,22 @@ function LitParametres()
 {
   let param;
 
-  //----- Paramètres généraux -----
+  //----- Paramètres Cloud -----
 
-  param = localStorage.getItem('VisuGPX');
+  param = localStorage.getItem('TxtURL');
   if (param == null)
-      param = "ABCD123456";
-  pid('TxtVisuGPX').value = param;
+      param = "(none)";
+  pid('TxtURL').value = param;
+
+  param = localStorage.getItem('TxtKEY');
+  if (param == null)
+      param = "(none)";
+  pid('TxtKEY').value = param;
+
+  param = localStorage.getItem('TxtUSER');
+  if (param == null)
+      param = "(none)";
+  pid('TxtUSER').value = param;
 
   //----- Paramètres géolocalisation -----
 
@@ -400,39 +412,42 @@ function changerTaillePoliceZoneSaisieQuery(NomClasse, nouvelleTaille)
 //-------------------------------------------------------
 async function ButCopierIDClick()
 {
-  const lMemo = pid('TxtVisuGPX').value;
-  pid('TxtVisuGPX').value = "https://www.visugpx.com/" + lMemo;
-
-  // Sélectionner le contenu et copier
-  pid('TxtVisuGPX').select();
-  pid('TxtVisuGPX').setSelectionRange(0, 99999); // Pour compatibilité mobile
-
-  // Ajouter une pause de 100ms
-  await new Promise(resolve => setTimeout(resolve, 100));
-
-  try
+  if (0) // TODO créer l'adresse complète
   {
-    document.execCommand('copy');
-    pid('ButCopierID').innerHTML = "Copié";
-    pid('ButCopierID').style.background = "#0F0";
-    pid('ButCopierID').style.color = "#000";
-    await new Promise(resolve => setTimeout(resolve, 500));
-    pid('ButCopierID').innerHTML = "Copier";
-    pid('ButCopierID').style.background = "#008";
-    pid('ButCopierID').style.color = "#FFF";
-  }
-  catch (err)
-  {
-    pid('ButCopierID').innerHTML = "Erreur";
-    pid('ButCopierID').style.background = "#F00";
-    await new Promise(resolve => setTimeout(resolve, 500));
-    pid('ButCopierID').innerHTML = "Copier dans Presse-papier";
-    pid('ButCopierID').style.background = "#008";
-  }
+    const lMemo = pid('TxtVisuGPX').value;
+    pid('TxtVisuGPX').value = "https://www.visugpx.com/" + lMemo;
 
-  pid('TxtVisuGPX').value = lMemo;
-  window.getSelection().removeAllRanges();
-  document.activeElement.blur();
+    // Sélectionner le contenu et copier
+    pid('TxtVisuGPX').select();
+    pid('TxtVisuGPX').setSelectionRange(0, 99999); // Pour compatibilité mobile
+
+    // Ajouter une pause de 100ms
+    await new Promise(resolve => setTimeout(resolve, 100));
+
+    try
+    {
+      document.execCommand('copy');
+      pid('ButCopierID').innerHTML = "Copié";
+      pid('ButCopierID').style.background = "#0F0";
+      pid('ButCopierID').style.color = "#000";
+      await new Promise(resolve => setTimeout(resolve, 500));
+      pid('ButCopierID').innerHTML = "Copier";
+      pid('ButCopierID').style.background = "#008";
+      pid('ButCopierID').style.color = "#FFF";
+    }
+    catch (err)
+    {
+      pid('ButCopierID').innerHTML = "Erreur";
+      pid('ButCopierID').style.background = "#F00";
+      await new Promise(resolve => setTimeout(resolve, 500));
+      pid('ButCopierID').innerHTML = "Copier dans Presse-papier";
+      pid('ButCopierID').style.background = "#008";
+    }
+
+    pid('TxtVisuGPX').value = lMemo;
+    window.getSelection().removeAllRanges();
+    document.activeElement.blur();
+  }
 }
 
 

@@ -25,6 +25,8 @@
   background-position: center center;
   overflow: hidden;
   cursor: pointer;
+  border: 1px solid #222;
+  border-shadow: none;
 }
 
 #ButTexteRetour

@@ -70,13 +70,18 @@
   <div style='height: 60px;'></div>
 
   <!-- GPX.Pos -->
-  <div style='font-size: 1.2em;'><b>Paramètres GPX</b></div>
-  URL
-  <div style="display: flex; justify-content: space-between; align-items: center;">
-    <input class='ZoneParamSaisie' type='text' id='TxtVisuGPX' placeholder="(10 caractères)"><br>
-    <button id="ButCopierID" onclick="ButCopierIDClick()">Copier</button>
-  </div>
+  <div style='font-size: 1.2em;'><b>Paramètres Cloud</b></div>
+  Adresse URL
+    <input class='ZoneParamSaisie' type='text' id='TxtURL' placeholder="(https://...)"><br>
+    <div style='height: 5px;'></div>
+  Clé
+    <input class='ZoneParamSaisie' type='text' id='TxtKEY' placeholder="(sb_publishable...)"><br>
+    <div style='height: 5px;'></div>
+  Numéro utilisateur
+  <input class='ZoneParamSaisie' type='text' id='TxtUSER' placeholder="(6 chiffres)"><br>
   <div style='height: 5px;'></div>
+  <button id="ButCopierID" onclick="ButCopierIDClick()">Copier</button>
+  <br>
   <br>
 
   <!-- Géolocalisation -->

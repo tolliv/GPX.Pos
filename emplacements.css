@@ -30,6 +30,8 @@
   overflow: hidden;
   cursor: pointer;
   background-image: url('imgGauche.png');
+  border: 1px solid #222;
+  border-shadow: none;
 }
 
 #ButGestionEmplacements
@@ -44,6 +46,8 @@
   cursor: pointer;
   background-color: #EFE;
   font-size: 11px;
+  border: 1px solid #222;
+  border-shadow: none;
 }
 
 

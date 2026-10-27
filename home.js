@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', function()
   // Affichage de l'écran HOME
   AfficherEcranHOME();
 
-  // ButMenuParamClicked(); // Mode DEBUG : Actions automatiques (commenter si RELEASE)
+  ButMenuParamClicked(); // Mode DEBUG : Actions automatiques (commenter si RELEASE)
 });
 
 //--------------------------------------------------------------------------------------------------

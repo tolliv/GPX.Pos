@@ -25,6 +25,8 @@
   background-position: center center;
   overflow: hidden;
   cursor: pointer;
+  border: 1px solid #222;
+  border-shadow: none;
 }
 
 #ButParamAnnuler
@@ -76,5 +78,7 @@
   background-color: #008;
   font-size: 14px;
   color: white;
+  border: 1px solid #222;
+  border-shadow: none;
 }
 
