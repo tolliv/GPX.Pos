@@ -149,22 +149,16 @@ function butChoixClicked(choix)
   switch(choix)
   {
     case "BOUTON1":
-      Localisation(choix, pid('ButParking'));
+      Localisation(choix, pid('ButActiviteDebut'));
       break;
     case "BOUTON2":
       Localisation(choix, pid('ButPosition'));
       break;
     case "BOUTON3":
-      Localisation(choix, pid('ButHorsIti'));
+      Localisation(choix, pid('ButBivouac'));
       break;
     case "BOUTON4":
-      Localisation(choix, pid('ButVariante'));
-      break;
-    case "BOUTON5":
-      Localisation(choix, pid('ButRepas'));
-      break;
-    case "BOUTON6":
-      Localisation(choix, pid('ButBivouac'));
+      Localisation(choix, pid('ButActiviteFin'));
       break;
     case "MEMO":
       Localisation(choix, pid('ButMemo'));

@@ -102,16 +102,19 @@ function LitParametres()
   if (param == null)
       param = "(none)";
   pid('TxtURL').value = param;
+  API_URL = param;
 
   param = localStorage.getItem('TxtKEY');
   if (param == null)
       param = "(none)";
   pid('TxtKEY').value = param;
+  API_KEY = param;
 
   param = localStorage.getItem('TxtUSER');
   if (param == null)
       param = "(none)";
   pid('TxtUSER').value = param;
+  USER = param;
 
   //----- Paramètres géolocalisation -----
 
@@ -455,44 +458,12 @@ async function ButCopierIDClick()
 
 
 //-------------------------------------------------------
-// Popup des icones
+// Test de la connexion à la base de données
 //-------------------------------------------------------
-let currentImageId = '';
-
-//----- Ouvrir le modal -----
-function ouvrirModal(idImage)
+async function ButTesterIDClick()
 {
-  currentImageId = idImage;
-  document.getElementById('modalIcones').style.display = 'block';
-}
-
-//----- Fermer le modal -----
-function fermerModal()
-{
-  document.getElementById('modalIcones').style.display = 'none';
-}
-
-//----- Sélection de l'icone -----
-function selectIcon(src)
-{
-  if (currentImageId)
-  {
-    // Met à jour la source de l'image cliquée sur la page principale
-    document.getElementById(currentImageId).src = src;
-  }
-  fermerModal();
-
-  // Optionnel : Enregistrer ici le changement dans le localStorage ou via une fonction de sauvegarde
-  console.log("Nouvelle icône sélectionnée pour " + currentImageId + " : " + src);
-}
-
-//----- Sélection de l'icone -----
-// Fermer la modale si on clique à l'extérieur du popup
-window.onclick = function(event)
-{
-  let modal = document.getElementById('modalIcones');
-  if (event.target == modal) {
-
-    fermerModal();
-  }
+  pid('txtResultatTestID').innerHTML = "En cours...";
+  const lRet = await SupabaseTestConnexion();
+  pid('txtResultatTestID').innerHTML = lRet;
+  console.log("Test de connexion : " + lRet);
 }

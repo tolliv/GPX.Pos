@@ -50,6 +50,8 @@ function afficherAideHtml()
 {
   const container = pid('TxtAide');
 
+  return; // TODO
+
   // Charger le contenu seulement s'il n'est pas déjà là
   if (container.innerHTML.trim() === "")
   {

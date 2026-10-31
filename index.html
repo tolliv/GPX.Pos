@@ -41,22 +41,14 @@
   </div>
   <textarea class='ZoneSaisie' id="TxtMessage" rows="6" style='resize: none;' placeholder="Entrez votre message..."></textarea>
   <br>
-  <!-- Boutons VisuGPX.Pos
-  <div id='DivParking'>  <button id="ButParking" onclick='butChoixClicked("BOUTON1")'>Parking</button><span id='TxtButParking'>Parking️️️</span><br> </div>
-  <div id='DivPosition'> <button id="ButPosition" onclick='butChoixClicked("BOUTON2")'>Position</button><span id='TxtButPosition'>Position</span><br> </div>
-  <div id='DivHorsIti'>  <button id="ButHorsIti" onclick='butChoixClicked("BOUTON3")'>Hors ITI</button><span id='TxtButHorsIti'>Hors Itinéraire</span><br> </div>
-  <div id='DivVariante'> <button id="ButVariante" onclick='butChoixClicked("BOUTON4")'>Variante</button><span id='TxtButVariante'>Variante</span><br> </div>
-  <div id='DivRepas'>    <button id="ButRepas" onclick='butChoixClicked("BOUTON5")'>Repas</button><span id='TxtButRepas'>Repas</span><br> </div>
-  <div id='DivBivouac'>  <button id="ButBivouac" onclick='butChoixClicked("BOUTON6")'>Bivouac</button><span id='TxtButBivouac'>Bivouac</span><br> </div>
-  <div id='DivMemo'>     <button id="ButMemo" onclick='butChoixClicked("MEMO")'>Mémo</button><span id='TxtButMemo'>Mémorisation</span><br> </div>
-   -->
+  <!-- Boutons page principale -->
+  <div style='padding-left: 10px; padding-top: 20px;'><b>Position envoyée sur GPX.Suivi</b></div>
   <div id='DivDebut'>    <button id="ButActiviteDebut" onclick='butChoixClicked("BOUTON1")'>Début</button><span id='TxtButDebut'>Début de l'activité</span><br> </div>
   <div id='DivPosition'> <button id="ButPosition" onclick='butChoixClicked("BOUTON2")'>Position</button><span id='TxtButPosition'>Position actuelle</span><br> </div>
-  <div id='DivBivouac'>  <button id="ButBivouac" onclick='butChoixClicked("BOUTON6")'>Bivouac</button><span id='TxtButBivouac'>Endroit du bivouac</span><br> </div>
-  <div id='DivFin'>      <button id="ButActiviteFin" onclick='butChoixClicked("BOUTON7")'>Fin</button><span id='TxtButBivouac'>Fin de l'activité</span><br> </div>
-  <br>
-  <br>
-  <div id='DivMemo'>     <button id="ButMemo" onclick='butChoixClicked("MEMO")'>Mémo</button><span id='TxtButMemo'>Mémorisation du texte hors ligne</span><br> </div>
+  <div id='DivBivouac'>  <button id="ButBivouac" onclick='butChoixClicked("BOUTON3")'>Bivouac</button><span id='TxtButBivouac'>Endroit du bivouac</span><br> </div>
+  <div id='DivFin'>      <button id="ButActiviteFin" onclick='butChoixClicked("BOUTON4")'>Fin</button><span id='TxtButFin'>Fin de l'activité</span><br> </div>
+  <div style='padding-left: 10px; padding-top: 20px;'><b>Mémorisation locale</b></div>
+  <div id='DivMemo'>     <button id="ButMemo" onclick='butChoixClicked("MEMO")'>Mémo</button><span id='TxtButMemo'>Mémorisation de texte</span><br> </div>
 
   <br>
   <div id='DivVersionBarre'>
@@ -90,7 +82,8 @@
   Numéro utilisateur
   <input class='ZoneParamSaisie' type='text' id='TxtUSER' placeholder="(6 chiffres)"><br>
   <div style='height: 5px;'></div>
-  <button id="ButCopierID" onclick="ButCopierIDClick()">Copier</button>
+  <button id="ButCopierID" onclick="ButCopierIDClick()" style='display: none;'>Copier</button>
+  <button id="ButTesterID" onclick="ButTesterIDClick()">Tester</button> <span id='txtResultatTestID'></span>
   <br>
   <br>
 
@@ -145,89 +138,92 @@
   <input class='ZoneParamSaisie' type='text' id='TxtTaillePolice' value="14"><br>
   <div style='height: 5px;'></div>
 
-  <!----> <hr style="border: 0; border-top: 1px solid #ddd; margin: 5px 0px 10px 0px;">
+  <!-- Non affiché dans cette version -->
+  <div style='display: none;'>
+    <!----> <hr style="border: 0; border-top: 1px solid #ddd; margin: 5px 0px 10px 0px;">
 
-  <div style="display: flex; align-items: center; gap: 5px;">
-    <input type="checkbox" id="ChkParking" name="" value="" checked style="margin: 0;">
-    <span style="background-color: lightblue; display: inline-flex; align-items: center; justify-content: center; border-radius: 14px; width: 60px; height: 16px; border: 1px solid #000; font-size: 0.8em;">Bouton 1</span>
+    <div style="display: flex; align-items: center; gap: 5px;">
+      <input type="checkbox" id="ChkParking" name="" value="" checked style="margin: 0;">
+      <span style="background-color: lightblue; display: inline-flex; align-items: center; justify-content: center; border-radius: 14px; width: 60px; height: 16px; border: 1px solid #000; font-size: 0.8em;">Bouton 1</span>
+    </div>
+    <input class='ZoneParamSaisie' type='text' id='TxtBoutonParking' value="Parking"><br>
+    <input class='ZoneParamSaisie' type='text' id='TxtParking' value="Emplacement de la voiture"><br>
+    <a href="#" onclick="ouvrirModal('poiParkingImg'); return false;">
+      <img id="poiParkingImg" src="poi_park.png" alt="" style="width: 22px; height: 22px; margin-left: 3px;">
+    </a>
+
+    <!----> <hr style="border: 0; border-top: 1px solid #ddd; margin: 5px 0px 10px 0px;">
+
+    <div style="display: flex; align-items: center; gap: 5px;">
+      <input type="checkbox" id="ChkPosition"  name="" value="" checked style="margin: 0;">
+      <span style="background-color: lightgreen; display: inline-flex; align-items: center; justify-content: center; border-radius: 14px; width: 60px; height: 16px; border: 1px solid #000; font-size: 0.8em;">Bouton 2</span>
+    </div>
+    <input class='ZoneParamSaisie' type='text' id='TxtBoutonPosition' value="Position"><br>
+    <input class='ZoneParamSaisie' type='text' id='TxtPosition' value="Position actuelle"><br>
+    <a href="#" onclick="ouvrirModal('poiPositionImg'); return false;">
+      <img id="poiPositionImg" src="poi_person.png" alt="" style="width: 22px; height: 22px; margin-left: 3px;">
+    </a>
+
+    <!----> <hr style="border: 0; border-top: 1px solid #ddd; margin: 5px 0px 10px 0px;">
+
+    <div style="display: flex; align-items: center; gap: 5px;">
+      <input type="checkbox" id="ChkHorsIti"  name="" value="" checked style="margin: 0;">
+      <span style="background-color: #080; display: inline-flex; align-items: center; justify-content: center; border-radius: 14px; width: 60px; height: 16px; border: 1px solid #000; font-size: 0.8em; color: white;">Bouton 3</span>
+    </div>
+    <input class='ZoneParamSaisie' type='text' id='TxtBoutonHorsIti' value="Hors ITI"><br>
+    <input class='ZoneParamSaisie' type='text' id='TxtHorsIti' value="Hors Itinéraire"><br>
+    <a href="#" onclick="ouvrirModal('poiHorsItiImg'); return false;">
+      <img id="poiHorsItiImg" src="poi_dirLeft.png" alt="" style="width: 22px; height: 22px; margin-left: 3px;">
+    </a>
+
+    <!----> <hr style="border: 0; border-top: 1px solid #ddd; margin: 5px 0px 10px 0px;">
+
+    <div style="display: flex; align-items: center; gap: 5px;">
+      <input type="checkbox" id="ChkVariante"  name="" value="" style="margin: 0;">
+      <span style="background-color: purple; display: inline-flex; align-items: center; justify-content: center; border-radius: 14px; width: 60px; height: 16px; border: 1px solid #000; font-size: 0.8em; color: white;">Bouton 4</span>
+    </div>
+    <input class='ZoneParamSaisie' type='text' id='TxtBoutonVariante' value="Variante"><br>
+    <input class='ZoneParamSaisie' type='text' id='TxtVariante' value="Itinéraire Variante"><br>
+    <a href="#" onclick="ouvrirModal('poiVarianteImg'); return false;">
+      <img id="poiVarianteImg" src="poi_dirLeft.png" alt="" style="width: 22px; height: 22px; margin-left: 3px;">
+    </a>
+
+    <!----> <hr style="border: 0; border-top: 1px solid #ddd; margin: 5px 0px 10px 0px;">
+
+    <div style="display: flex; align-items: center; gap: 5px;">
+      <input type="checkbox" id="ChkRepas"  name="" value="" checked style="margin: 0;">
+      <span style="background-color: yellow; display: inline-flex; align-items: center; justify-content: center; border-radius: 14px; width: 60px; height: 16px; border: 1px solid #000; font-size: 0.8em;">Bouton 5</span>
+    </div>
+    <input class='ZoneParamSaisie' type='text' id='TxtBoutonRepas' value="Repas"><br>
+    <input class='ZoneParamSaisie' type='text' id='TxtRepas' value="Emplacement du repas"><br>
+    <a href="#" onclick="ouvrirModal('poiRepasImg'); return false;">
+      <img id="poiRepasImg" src="poi_restaurant.png" alt="" style="width: 22px; height: 22px; margin-left: 3px;">
+    </a>
+
+    <!----> <hr style="border: 0; border-top: 1px solid #ddd; margin: 5px 0px 10px 0px;">
+
+    <div style="display: flex; align-items: center; gap: 5px;">
+      <input type="checkbox" id="ChkBivouac"  name="" value="" checked style="margin: 0;">
+      <span style="background-color: orange; display: inline-flex; align-items: center; justify-content: center; border-radius: 14px; width: 60px; height: 16px; border: 1px solid #000; font-size: 0.8em;">Bouton 6</span>
+    </div>
+    <input class='ZoneParamSaisie' type='text' id='TxtBoutonBivouac' value="Bivouac"><br>
+    <input class='ZoneParamSaisie' type='text' id='TxtBivouac' value="Emplacement du bivouac"><br>
+    <a href="#" onclick="ouvrirModal('poiBivouacImg'); return false;">
+      <img id="poiBivouacImg" src="poi_camping.png" alt="" style="width: 22px; height: 22px; margin-left: 3px;">
+    </a>
+
+    <!----> <hr style="border: 0; border-top: 1px solid #ddd; margin: 5px 0px 10px 0px;">
+
+    <div style="display: flex; align-items: center; gap: 5px;">
+      <input type="checkbox" id="ChkMemo"  name="" value="" checked style="margin: 0;">
+      <span style="background-color: #FCC; display: inline-flex; align-items: center; justify-content: center; border-radius: 14px; width: 60px; height: 16px; border: 1px solid #000; font-size: 0.8em;">Bouton 7</span>
+    </div>
+    <input class='ZoneParamSaisie' type='text' id='TxtBoutonMemo' value="Mémo"><br>
+    <input class='ZoneParamSaisie' type='text' id='TxtMemo' value="Memorisation d'un message"><br>
+    <i>(Pas de positionnement sur VisuGPX)</i><br>
+
+    <!----> <hr style="border: 0; border-top: 1px solid #ddd; margin: 5px 0px 10px 0px;">
   </div>
-  <input class='ZoneParamSaisie' type='text' id='TxtBoutonParking' value="Parking"><br>
-  <input class='ZoneParamSaisie' type='text' id='TxtParking' value="Emplacement de la voiture"><br>
-  <a href="#" onclick="ouvrirModal('poiParkingImg'); return false;">
-    <img id="poiParkingImg" src="poi_park.png" alt="" style="width: 22px; height: 22px; margin-left: 3px;">
-  </a>
-
-  <!----> <hr style="border: 0; border-top: 1px solid #ddd; margin: 5px 0px 10px 0px;">
-
-  <div style="display: flex; align-items: center; gap: 5px;">
-    <input type="checkbox" id="ChkPosition"  name="" value="" checked style="margin: 0;">
-    <span style="background-color: lightgreen; display: inline-flex; align-items: center; justify-content: center; border-radius: 14px; width: 60px; height: 16px; border: 1px solid #000; font-size: 0.8em;">Bouton 2</span>
-  </div>
-  <input class='ZoneParamSaisie' type='text' id='TxtBoutonPosition' value="Position"><br>
-  <input class='ZoneParamSaisie' type='text' id='TxtPosition' value="Position actuelle"><br>
-  <a href="#" onclick="ouvrirModal('poiPositionImg'); return false;">
-    <img id="poiPositionImg" src="poi_person.png" alt="" style="width: 22px; height: 22px; margin-left: 3px;">
-  </a>
-
-  <!----> <hr style="border: 0; border-top: 1px solid #ddd; margin: 5px 0px 10px 0px;">
-
-  <div style="display: flex; align-items: center; gap: 5px;">
-    <input type="checkbox" id="ChkHorsIti"  name="" value="" checked style="margin: 0;">
-    <span style="background-color: #080; display: inline-flex; align-items: center; justify-content: center; border-radius: 14px; width: 60px; height: 16px; border: 1px solid #000; font-size: 0.8em; color: white;">Bouton 3</span>
-  </div>
-  <input class='ZoneParamSaisie' type='text' id='TxtBoutonHorsIti' value="Hors ITI"><br>
-  <input class='ZoneParamSaisie' type='text' id='TxtHorsIti' value="Hors Itinéraire"><br>
-  <a href="#" onclick="ouvrirModal('poiHorsItiImg'); return false;">
-    <img id="poiHorsItiImg" src="poi_dirLeft.png" alt="" style="width: 22px; height: 22px; margin-left: 3px;">
-  </a>
-
-  <!----> <hr style="border: 0; border-top: 1px solid #ddd; margin: 5px 0px 10px 0px;">
-
-  <div style="display: flex; align-items: center; gap: 5px;">
-    <input type="checkbox" id="ChkVariante"  name="" value="" style="margin: 0;">
-    <span style="background-color: purple; display: inline-flex; align-items: center; justify-content: center; border-radius: 14px; width: 60px; height: 16px; border: 1px solid #000; font-size: 0.8em; color: white;">Bouton 4</span>
-  </div>
-  <input class='ZoneParamSaisie' type='text' id='TxtBoutonVariante' value="Variante"><br>
-  <input class='ZoneParamSaisie' type='text' id='TxtVariante' value="Itinéraire Variante"><br>
-  <a href="#" onclick="ouvrirModal('poiVarianteImg'); return false;">
-    <img id="poiVarianteImg" src="poi_dirLeft.png" alt="" style="width: 22px; height: 22px; margin-left: 3px;">
-  </a>
-
-  <!----> <hr style="border: 0; border-top: 1px solid #ddd; margin: 5px 0px 10px 0px;">
-
-  <div style="display: flex; align-items: center; gap: 5px;">
-    <input type="checkbox" id="ChkRepas"  name="" value="" checked style="margin: 0;">
-    <span style="background-color: yellow; display: inline-flex; align-items: center; justify-content: center; border-radius: 14px; width: 60px; height: 16px; border: 1px solid #000; font-size: 0.8em;">Bouton 5</span>
-  </div>
-  <input class='ZoneParamSaisie' type='text' id='TxtBoutonRepas' value="Repas"><br>
-  <input class='ZoneParamSaisie' type='text' id='TxtRepas' value="Emplacement du repas"><br>
-  <a href="#" onclick="ouvrirModal('poiRepasImg'); return false;">
-    <img id="poiRepasImg" src="poi_restaurant.png" alt="" style="width: 22px; height: 22px; margin-left: 3px;">
-  </a>
-
-  <!----> <hr style="border: 0; border-top: 1px solid #ddd; margin: 5px 0px 10px 0px;">
-
-  <div style="display: flex; align-items: center; gap: 5px;">
-    <input type="checkbox" id="ChkBivouac"  name="" value="" checked style="margin: 0;">
-    <span style="background-color: orange; display: inline-flex; align-items: center; justify-content: center; border-radius: 14px; width: 60px; height: 16px; border: 1px solid #000; font-size: 0.8em;">Bouton 6</span>
-  </div>
-  <input class='ZoneParamSaisie' type='text' id='TxtBoutonBivouac' value="Bivouac"><br>
-  <input class='ZoneParamSaisie' type='text' id='TxtBivouac' value="Emplacement du bivouac"><br>
-  <a href="#" onclick="ouvrirModal('poiBivouacImg'); return false;">
-    <img id="poiBivouacImg" src="poi_camping.png" alt="" style="width: 22px; height: 22px; margin-left: 3px;">
-  </a>
-
-  <!----> <hr style="border: 0; border-top: 1px solid #ddd; margin: 5px 0px 10px 0px;">
-
-  <div style="display: flex; align-items: center; gap: 5px;">
-    <input type="checkbox" id="ChkMemo"  name="" value="" checked style="margin: 0;">
-    <span style="background-color: #FCC; display: inline-flex; align-items: center; justify-content: center; border-radius: 14px; width: 60px; height: 16px; border: 1px solid #000; font-size: 0.8em;">Bouton 7</span>
-  </div>
-  <input class='ZoneParamSaisie' type='text' id='TxtBoutonMemo' value="Mémo"><br>
-  <input class='ZoneParamSaisie' type='text' id='TxtMemo' value="Memorisation d'un message"><br>
-  <i>(Pas de positionnement sur VisuGPX)</i><br>
-
-  <!----> <hr style="border: 0; border-top: 1px solid #ddd; margin: 5px 0px 10px 0px;">
 
   <!-- Informations -->
   <br>
@@ -237,53 +233,8 @@
   <br>
 </div>
 
-<!-- Fenêtre Modale de sélection d'icônes -->
-<div id="modalIcones" style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5);">
-  <div style="background-color: white; margin: 15% auto; padding: 10px; border-radius: 10px; width: 90%; max-width: 250px; text-align: center; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
-    <h3 style="margin-top: 0;">Choisir une icône</h3>
-
-    <div id="listeIcones" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 20px; justify-items: center;">
-      <img src="poi_park.png" onclick="selectIcon(this.src)" style="width: 26px; cursor: pointer;">
-      <img src="poi_ville.png" onclick="selectIcon(this.src)" style="width: 26px; cursor: pointer;">
-      <img src="poi_abri.png" onclick="selectIcon(this.src)" style="width: 26px; cursor: pointer;">
-      <img src="poi_drink.png" onclick="selectIcon(this.src)" style="width: 26px; cursor: pointer;">
-      <img src="poi_person.png" onclick="selectIcon(this.src)" style="width: 26px; cursor: pointer;">
-
-      <img src="poi_.png" onclick="selectIcon(this.src)" style="width: 26px; cursor: pointer;">
-      <img src="poi__.png" onclick="selectIcon(this.src)" style="width: 26px; cursor: pointer;">
-      <img src="poi___.png" onclick="selectIcon(this.src)" style="width: 26px; cursor: pointer;">
-      <img src="poi_alarm.png" onclick="selectIcon(this.src)" style="width: 26px; cursor: pointer;">
-      <img src="poi_danger.png" onclick="selectIcon(this.src)" style="width: 26px; cursor: pointer;">
-
-      <img src="poi_restaurant.png" onclick="selectIcon(this.src)" style="width: 26px; cursor: pointer;">
-      <img src="poi_refuge.png" onclick="selectIcon(this.src)" style="width: 26px; cursor: pointer;">
-      <img src="poi_camping.png" onclick="selectIcon(this.src)" style="width: 26px; cursor: pointer;">
-      <img src="poi_bus.png" onclick="selectIcon(this.src)" style="width: 26px; cursor: pointer;">
-      <img src="poi_sommet.png" onclick="selectIcon(this.src)" style="width: 26px; cursor: pointer;">
-
-      <img src="poi_dirLeft.png" onclick="selectIcon(this.src)" style="width: 26px; cursor: pointer;">
-      <img src="poi_dirFront.png" onclick="selectIcon(this.src)" style="width: 26px; cursor: pointer;">
-      <img src="poi_dirRight.png" onclick="selectIcon(this.src)" style="width: 26px; cursor: pointer;">
-      <img src="poi_azimut.png" onclick="selectIcon(this.src)" style="width: 26px; cursor: pointer;">
-      <img src="poi_Waypoint.png" onclick="selectIcon(this.src)" style="width: 26px; cursor: pointer;">
-
-      <img src="poi_attraction.png" onclick="selectIcon(this.src)" style="width: 26px; cursor: pointer;">
-      <img src="poi_bienetre.png" onclick="selectIcon(this.src)" style="width: 26px; cursor: pointer;">
-      <img src="poi_picnic.png" onclick="selectIcon(this.src)" style="width: 26px; cursor: pointer;">
-      <img src="poi_info.png" onclick="selectIcon(this.src)" style="width: 26px; cursor: pointer;">
-      <img src="poi_velo.png" onclick="selectIcon(this.src)" style="width: 26px; cursor: pointer;">
-
-      <img src="poi_balise.png" onclick="selectIcon(this.src)" style="width: 26px; cursor: pointer;">
-      <img src="poi_cueillette.png" onclick="selectIcon(this.src)" style="width: 26px; cursor: pointer;">
-      <img src="poi_star.png" onclick="selectIcon(this.src)" style="width: 26px; cursor: pointer;">
-
-    </div>
-
-    <button onclick="fermerModal()" style="padding: 8px 16px; cursor: pointer; border-radius: 5px; border: 1px solid #ccc; background: #f0f0f0;">Annuler</button>
-  </div>
-</div>
-
 <script src="param.js"></script>
+<script src="driverSupabase.js"></script>
 
 <!----- ECRAN TRAITEMENTS ----->
 <link rel='stylesheet' type='text/css' href='traitements.css'>

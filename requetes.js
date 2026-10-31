@@ -15,7 +15,7 @@ function AfficherEcranREQ()
   let lNbReq = 0;
   if (lReq != null)
   {
-    lNbReq = CompteRequetes(lReq);
+    lNbReq = CompteRequetes(lReq); // TODO
   }
   else
     lNbReq = 0;
@@ -143,7 +143,7 @@ async function ButEnvoiRequetesClicked()
       else
       {
         const lErreurs = lNbReq - lRequetesEnvoyees;
-        pid('TxtEnvoiRequetesStatut').innerHTML += "<b>" + lErreurs + "</b> Erreur" + S(lErreurs) + "<br>";
+        pid('TxtEnvoiRequetesStatut').innerHTML += S("<b>", lErreurs, "</b> Erreur") + "<br>";
         if (gHtmlText.startsWith("Err: Fichier non trouvé"))
           pid('TxtEnvoiRequetesStatut').innerHTML += "<i>Vérifier l'ID VisuGPX</i>";
         else if (gHtmlText.startsWith("Err: La trace doit être cachée"))
@@ -165,7 +165,7 @@ async function ButEnvoiRequetesClicked()
 }
 
 //--------------------------------------------------------------------------------------------------
-// Envoi des requêtes pour VisuGPX et vide le buffer
+// Envoi des requêtes à partir du FIFO
 //--------------------------------------------------------------------------------------------------
 async function EnvoiRequetes()
 {
@@ -182,50 +182,27 @@ async function EnvoiRequetes()
     else
     {
         // Compte le nombre de requêtes mémorisées
-        let lReq = localStorage.getItem('RequetesVisuGPX');
-        let lNbReq = 0;
-        if (lReq != null)
-        {
-          lNbReq = CompteRequetes(lReq);
-        }
-        else
-          lNbReq = 0;
+        let lNbReq = CountFIFO();
 
         // S'il y a des requêtes à envoyer
         if (lNbReq > 0)
         {
-            // Diviser les requêtes si elles sont concaténées avec "¶" comme séparateur
-            const requetesArray = lReq.split("¶").filter(req => req.trim() !== '');
-            // Filtrer les chaînes vides
-
             pid("Step3").style.backgroundColor = ColEnCours;
-            pid('TxtStep3').innerHTML = "<b>Envoi</b><br>";
-            pid('TxtStep3').innerHTML += "Envoi de <b>" + requetesArray.length + "</b> requête" + S(requetesArray.length) + "..";
+            pid('TxtStep3').innerHTML  = "<b>Envoi</b><br>";
+            pid('TxtStep3').innerHTML += S("Envoi de <b>", lNbReq, "</b> requête") + "..";
 
             //----- Boucle sur toutes les requêtes mémorisées -----
             let lRequetesEnvoyees = 0;
-            for (const singleReq of requetesArray)
+            for (let n = 1; n <= lNbReq; n++)
             {
-                // S'assurer que c'est une URL valide
-                if (singleReq.startsWith("https://www.visugpx.com/"))
+                const singleReq = PeekFIFO();   // Lecture sans suppression
+                const lRet = await EnvoiSingleRequete(singleReq);
+
+                // Vérifie la valeur de retour. Si OK, on supprime
+                if (lRet == "OK")
                 {
-                    // Fetch
-                    FetchCors(singleReq);
-
-                    // Boucle d'attente
-                    for (let lCount = 0; lCount < 50; lCount++)
-                    {
-                      await sleep(200);
-                      if (gStatusRequete < 50)
-                        break;
-                    }
-
-                    // Vérifie la valeur de retour
-                    if (gStatusRequete == 0)
-                    {
-                      if (gHtmlText.startsWith("Succes"))
-                        lRequetesEnvoyees++;
-                    }
+                  lRequetesEnvoyees++;
+                  PopFIFO();
                 }
             }
 
@@ -234,10 +211,7 @@ async function EnvoiRequetes()
             {
                 pid("Step3").style.backgroundColor = ColOK;
                 pid('TxtStep3').innerHTML = "<b>Envoi</b><br>"
-                pid('TxtStep3').innerHTML += "<b>" + lNbReq + "</b> requête" + S(lNbReq) + " envoyée" + S(lNbReq) +"<br>";
-
-                // On efface le buffer
-                localStorage.setItem('RequetesVisuGPX', "");
+                pid('TxtStep3').innerHTML += S("<b>", lNbReq, "</b> requête") + S(" ", lNbReq, " envoyée") + "<br>";
 
                 // Chargement du bulletin météo
                 pid("Step4").style.backgroundColor = ColEnCours;;
@@ -253,19 +227,13 @@ async function EnvoiRequetes()
                 pid('TxtStep4').innerHTML += "Chargé";
             }
 
-            // Au moins une erreur, on n'efface par le buffer, tant pis pour les doublons
+            // Au moins une erreur, les requêtes non envoyées n'ont pas été effacées
             else
             {
                 const lErreurs = lNbReq - lRequetesEnvoyees;
                 pid("Step3").style.backgroundColor = ColErreur;
                 pid('TxtStep3').innerHTML = "<b>Envoi</b><br>";
-                pid('TxtStep3').innerHTML += "<b>" + lErreurs + "</b> Erreur" + S(lErreurs) + "<br>";
-                if (gHtmlText.startsWith("Err: Fichier non trouvé"))
-                    pid('TxtStep3').innerHTML += "<i>Vérifier l'ID VisuGPX<i>";
-                else if (gHtmlText.startsWith("Err: La trace doit être cachée"))
-                    pid('TxtStep3').innerHTML += "<i>Modifier le type de la trace en 'Cachée'";
-                else
-                    pid('TxtStep3').innerHTML += "<i>" + gHtmlText + "</i>";
+                pid('TxtStep3').innerHTML += S("<b>", lErreurs, "</b> Erreur") + "<br>";
             }
         }
 
@@ -276,7 +244,6 @@ async function EnvoiRequetes()
             pid('TxtStep3').innerHTML = "<b>Envoi</b><br>";
             pid('TxtStep3').innerHTML += "Aucune requête à envoyer";
         }
-
     }
 }
 
@@ -308,14 +275,16 @@ async function FetchCors(url)
 }
 
 //--------------------------------------------------------------------------------------------------
-// Ajout d'un "s" si le nombre est supérieur à 1
+// Ajoute un 's' ou non à un texte
+// avantTexte peut servir à ajouter un formatage
+// Exemple S("<b>", second, "</b> secondes")
 //--------------------------------------------------------------------------------------------------
-function S(pNombre)
+function S(avantTexte, nombre, apresTexte)
 {
-  if (pNombre > 1)
-      return "s";
-  else
-      return "";
+  let textefinal = avantTexte + nombre + apresTexte;
+  if (nombre > 1)
+    textefinal += "s";
+  return(textefinal);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -328,3 +297,117 @@ function ButReqRetourClick()
 }
 
 
+//=======================================================
+// GESTION FIFO (LocalStorage)
+//=======================================================
+
+const STORAGE_KEY_FIFO = 'RequetesFIFO';
+
+
+//--------------------------------------------------------------------------------------------------
+// Ajoute une requête à la fin de la file (FIFO)
+//--------------------------------------------------------------------------------------------------
+function WriteFIFO(pRequete)
+{
+  try
+  {
+    // Récupérer la file actuelle
+    let lFile = [];
+    const lData = localStorage.getItem(STORAGE_KEY_FIFO);
+
+    if (lData)
+    {
+      lFile = JSON.parse(lData);
+    }
+
+    // Ajouter le nouvel objet à la fin
+    lFile.push(pRequete);
+
+    // Sauvegarder
+    localStorage.setItem(STORAGE_KEY_FIFO, JSON.stringify(lFile));
+  }
+  catch (e)
+  {
+    console.error("Erreur WriteFIFO:", e);
+  }
+}
+
+//--------------------------------------------------------------------------------------------------
+// Récupère la requête la plus ancienne SANS la supprimer
+//--------------------------------------------------------------------------------------------------
+function PeekFIFO()
+{
+  try
+  {
+    const lData = localStorage.getItem(STORAGE_KEY_FIFO);
+    if (!lData)
+      return(null);
+
+    let lFile = JSON.parse(lData);
+    return (lFile.length > 0 ? lFile[0] : null);
+  }
+  catch (e)
+  {
+    console.error("Erreur PeekFIFO:", e);
+    return(null);
+  }
+}
+
+//--------------------------------------------------------------------------------------------------
+// Supprime la requête la plus ancienne (à appeler après confirmation d'envoi)
+//--------------------------------------------------------------------------------------------------
+function PopFIFO()
+{
+  try
+  {
+    const lData = localStorage.getItem(STORAGE_KEY_FIFO);
+    if (!lData)
+      return;
+
+    let lFile = JSON.parse(lData);
+    if (lFile.length > 0)
+    {
+      lFile.shift(); // Retire le premier
+      localStorage.setItem(STORAGE_KEY_FIFO, JSON.stringify(lFile));
+    }
+  }
+  catch (e)
+  {
+    console.error("Erreur PopFIFO:", e);
+  }
+}
+
+//--------------------------------------------------------------------------------------------------
+// Vérifie s'il reste des requêtes en attente
+//--------------------------------------------------------------------------------------------------
+function CountFIFO()
+{
+  const lData = localStorage.getItem(STORAGE_KEY_FIFO);
+  if (!lData)
+    return(0);
+  try
+  {
+    const lFile = JSON.parse(lData);
+    return lFile.length;
+  }
+  catch (e)
+  {
+    return(0);
+  }
+}
+
+//--------------------------------------------------------------------------------------------------
+// Envoi de la requête
+// Renvoie "OK" ou "Erreur .."
+//--------------------------------------------------------------------------------------------------
+async function EnvoiSingleRequete(nouveauPoint)
+{
+  console.log("Ecriture en cours");
+  const t0 = performance.now();
+
+  // Ecriture
+  const lStatus = await SupabaseWrite(nouveauPoint);
+  const delta = Math.round(0.100*(performance.now() - t0))/100;
+  console.log("Ecriture " + lStatus + " (" + delta + "s)");
+  return(lStatus);
+}

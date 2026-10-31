@@ -14,7 +14,7 @@ let gDemandeAnnulation = false;
 //--------------------------------------------------------------------------------------------------
 // Afficher l'écran scrTrait
 // Demande la localisation
-// pChoix = "BOUTON1", "BOUTON2", "BOUTON3", "BOUTON4", "BOUTON5", "BOUTON6", "MEMO"
+// pChoix = "BOUTON1", "BOUTON2", "BOUTON3", "BOUTON4", "MEMO"
 //--------------------------------------------------------------------------------------------------
 async function Localisation(pChoix, choixBouton)
 {
@@ -70,8 +70,8 @@ async function Localisation(pChoix, choixBouton)
     if (lStatus > 1)
     {
       const lRestant = Math.round(lTimeout/10);
-      pid('TxtStep1').innerHTML = "<b>Localisation</b> (" + lRestant + "s restante" + S(lRestant) + ")<br>";
-      pid('TxtStep1').innerHTML+= "précision = <b>" + gGeoAccuracy + "m</b> (seuil = " + iSeuilPrecision + "m)<br>";
+      pid('TxtStep1').innerHTML  = S("<b>Localisation</b> (", lRestant, "s restante") + ")<br>";
+      pid('TxtStep1').innerHTML += "précision = <b>" + gGeoAccuracy + "m</b> (seuil = " + iSeuilPrecision + "m)<br>";
       pid("Step1").style.backgroundColor = ColEnCours;
     }
 
@@ -100,7 +100,7 @@ async function Localisation(pChoix, choixBouton)
     {
       const lRestant = Math.round(lTimeout/10);
       pid("Step1").style.backgroundColor = ColOK;
-      pid('TxtStep1').innerHTML = "<b>Localisation</b> (" + lRestant + "s restante" + S(lRestant) + ")<br>";
+      pid('TxtStep1').innerHTML = S("<b>Localisation</b> (", lRestant, "s restante") + ")<br>";
       pid('TxtStep1').innerHTML+= "précision = <b>"+ gGeoAccuracy + "m</b> (seuil = "+iSeuilPrecision+"m)<br>";
       pid('TxtStep1').innerHTML+= "Lat,Lon = " + gGeoLatitude + " , " + gGeoLongitude + "<br>";
       pid('TxtStep1').innerHTML+= "Altitude = " + gGeoAltitude + "m";
@@ -142,28 +142,17 @@ async function Localisation(pChoix, choixBouton)
     localStorage.setItem('AccuracyMemo', gGeoAccuracy);
 
     //----- Mémorisation dans MSG -----
-    // Valable pour tous les choix
-    let maintenant = new Date();
-    let jourSemaine = maintenant.toLocaleDateString('fr-FR', { weekday: 'long' });
-    let MoisTexte = maintenant.toLocaleDateString('fr-FR', { month: 'long' });
-    let jourSemaineCapitalise = jourSemaine.charAt(0).toUpperCase() + jourSemaine.slice(1);
-    let jourDuMois = maintenant.getDate();
-    let moisAjuste = maintenant.getMonth() + 1;
-    let heures = maintenant.getHours();     // Récupère les heures (0-23)
-    let minutes = maintenant.getMinutes();  // Récupère les minutes (0-59)
-    let minutesFormattees = (minutes < 10 ? '0' + minutes : minutes);
-    let heureActuelle = heures + "h" + minutesFormattees;
-    let lLigne1  = "!P " + jourSemaineCapitalise + " " + jourDuMois + " " + MoisTexte;
-        lLigne1 += " à " + heureActuelle +"\n";
-        lLigne1 += "!B Lat,Lon= " + gGeoLatitude + "," + gGeoLongitude + " ("+ gGeoAccuracy + "m)\n";
+    // Date
+    const lDateAbsolue = DateSupabase();
+    const lDateRelative = FormaterDateRelative(Number(lDateAbsolue), 'complete');
+    let lLigne1 = "!P " + lDateRelative.j + " à " + lDateRelative.h;
     let lLigne2 = "!V ";
-    lLigne2 += (pChoix=="BOUTON1"?pid('TxtButParking').innerHTML:"");
-    lLigne2 += (pChoix=="BOUTON2"?pid('TxtButPosition').innerHTML:"");
-    lLigne2 += (pChoix=="BOUTON3"?pid('TxtButHorsIti').innerHTML:"");
-    lLigne2 += (pChoix=="BOUTON4"?pid('TxtButVariante').innerHTML:"");
-    lLigne2 += (pChoix=="BOUTON5"?pid('TxtButRepas').innerHTML:"");
-    lLigne2 += (pChoix=="BOUTON6"?pid('TxtButBivouac').innerHTML:"");
-    lLigne2 += (pChoix=="MEMO"?pid('TxtButMemo').innerHTML:"");
+
+    if (pChoix=="BOUTON1")  lLigne2 += "Début";
+    if (pChoix=="BOUTON2")  lLigne2 += "Position";
+    if (pChoix=="BOUTON3")  lLigne2 += "Bivouac";
+    if (pChoix=="BOUTON4")  lLigne2 += "Fin";
+    if (pChoix=="MEMO")  lLigne2 += "Mémo";
     lLigne2 += "\n";
 
     let lLigne3 = pid('TxtMessage').value;
@@ -180,22 +169,20 @@ async function Localisation(pChoix, choixBouton)
       pid("Step2").style.backgroundColor = ColEnCours;
 
       // Création de la requête internet
-      let lNewReq = "https://www.visugpx.com/addpoi.php?poi=";
-      lNewReq += pid('TxtVisuGPX').value + ";";
-      lNewReq += gGeoLatitude + ";";
-      lNewReq += gGeoLongitude + ";";
+      let lNewReq = {};
+      lNewReq.user = Number(USER);
+      lNewReq.type = 100;
+      lNewReq.date = lDateAbsolue;
+      lNewReq.lat  = gGeoLatitude;
+      lNewReq.lon  = gGeoLongitude;
+      lNewReq.alt  = gGeoAltitude;
+      lNewReq.prec = gGeoAccuracy;
 
-      // Nom du bouton
-      if (pChoix=="BOUTON1")  lNewReq += pid('TxtBoutonParking').value;
-      if (pChoix=="BOUTON2")  lNewReq += pid('TxtBoutonPosition').value;
-      if (pChoix=="BOUTON3")  lNewReq += pid('TxtBoutonHorsIti').value;
-      if (pChoix=="BOUTON4")  lNewReq += pid('TxtBoutonVariante').value;
-      if (pChoix=="BOUTON5")  lNewReq += pid('TxtBoutonRepas').value;
-      if (pChoix=="BOUTON6")  lNewReq += pid('TxtBoutonBivouac').value;
-      lNewReq += "<br>";
-
-      lNewReq += jourSemaineCapitalise + " " + jourDuMois + " " + MoisTexte + " ";
-      lNewReq += heureActuelle + ";";
+      // Type de point
+      if (pChoix=="BOUTON1")  lNewReq.poi = 1;
+      if (pChoix=="BOUTON2")  lNewReq.poi = 2;
+      if (pChoix=="BOUTON3")  lNewReq.poi = 3;
+      if (pChoix=="BOUTON4")  lNewReq.poi = 4;
 
       // Supprime tous les \n à la fin du message sauf 1
       let lMessage = pid('TxtMessage').value;
@@ -203,33 +190,14 @@ async function Localisation(pChoix, choixBouton)
       {
         lMessage = lMessage.slice(0, -1); // Supprime le dernier caractère
       }
-
-      // Ajoute systématiquement un \n
       lMessage += '\n';
 
       // Remplacer \n par <br>
       const lMessageBR = lMessage.replace(/\n/g, '<br>');
-      lNewReq += "Précision=" + gGeoAccuracy + "m<br>";
-      lNewReq += lMessageBR + ";";
+      lNewReq.msg = lMessageBR;
 
-      // Icone
-      if (pChoix=="BOUTON1")  lNewReq += ExtraitNomIcone('poiParkingImg');
-      if (pChoix=="BOUTON2")  lNewReq += ExtraitNomIcone('poiPositionImg');
-      if (pChoix=="BOUTON3")  lNewReq += ExtraitNomIcone('poiHorsItiImg');
-      if (pChoix=="BOUTON4")  lNewReq += ExtraitNomIcone('poiVarianteImg');
-      if (pChoix=="BOUTON5")  lNewReq += ExtraitNomIcone('poiRepasImg');
-      if (pChoix=="BOUTON6")  lNewReq += ExtraitNomIcone('poiBivouacImg');
-      lNewReq += "¶";
-
-
-      // Ajout nouvelle requête dans le buffer
-      let lOldReq = localStorage.getItem('RequetesVisuGPX');
-      if (lOldReq == null)
-        lOldReq = "";
-      lNewReq = lOldReq + lNewReq;
-      localStorage.setItem('RequetesVisuGPX', lNewReq);
-
-      // Compte et affiche le nouveau nombre de requêtes mémorisées
+      // Ajout nouvelle requête dans le FIFO
+      WriteFIFO(lNewReq);
       pid("TxtStep2").innerHTML += "Requête mémorisée<br>";
 
       // Envoi des requêtes
