@@ -145,7 +145,8 @@ async function Localisation(pChoix, choixBouton)
     // Date
     const lDateAbsolue = DateSupabase();
     const lDateRelative = FormaterDateRelative(Number(lDateAbsolue), 'complete');
-    let lLigne1 = "!P " + lDateRelative.j + " à " + lDateRelative.h;
+    let lLigne1  = "!P " + lDateRelative.j + " à " + lDateRelative.h + "\n";
+        lLigne1 += "!B Lat,Lon= " + gGeoLatitude + "," + gGeoLongitude + " ("+ gGeoAccuracy + "m)\n";
     let lLigne2 = "!V ";
 
     if (pChoix=="BOUTON1")  lLigne2 += "Début";
@@ -155,10 +156,17 @@ async function Localisation(pChoix, choixBouton)
     if (pChoix=="MEMO")  lLigne2 += "Mémo";
     lLigne2 += "\n";
 
-    let lLigne3 = pid('TxtMessage').value;
-    if (lLigne3 != "")
+    // Supprime tous les \n à la fin du message
+    let lMessage = pid('TxtMessage').value;
+    while ( (lMessage.length > 0) && (lMessage.slice(-1) === '\n') )
+    {
+      lMessage = lMessage.slice(0, -1); // Supprime le dernier caractère
+    }
+    let lLigne3 = lMessage + "\n";
+    if (lMessage.length > 0)
       lLigne3 += "\n";
-    const lNouveauMessage = lLigne1 + lLigne2 + lLigne3 + "\n";
+
+    const lNouveauMessage = lLigne1 + lLigne2 + lLigne3;
     AjouterLigne(lNouveauMessage);    // Message mémorisé dans MSG
     pid("TxtStep2").innerHTML += "Message mémorisé<br>";
 
@@ -184,14 +192,6 @@ async function Localisation(pChoix, choixBouton)
       if (pChoix=="BOUTON3")  lNewReq.poi = 3;
       if (pChoix=="BOUTON4")  lNewReq.poi = 4;
 
-      // Supprime tous les \n à la fin du message sauf 1
-      let lMessage = pid('TxtMessage').value;
-      while ( (lMessage.length > 0) && (lMessage.slice(-1) === '\n') )
-      {
-        lMessage = lMessage.slice(0, -1); // Supprime le dernier caractère
-      }
-      lMessage += '\n';
-
       // Remplacer \n par <br>
       const lMessageBR = lMessage.replace(/\n/g, '<br>');
       lNewReq.msg = lMessageBR;
@@ -200,8 +200,8 @@ async function Localisation(pChoix, choixBouton)
       WriteFIFO(lNewReq);
       pid("TxtStep2").innerHTML += "Requête mémorisée<br>";
 
-      // Envoi des requêtes
-      EnvoiRequetes();
+      // Envoi des requêtes mémorisées
+      EnvoiRequetesFIFO();
       pid("Step2").style.backgroundColor = ColOK;
     }
 
@@ -233,13 +233,3 @@ function ButTraitRetourClick()
   AfficherEcranHOME();
 }
 
-//--------------------------------------------------------------------------------------------------
-// Extrait le nom "propre" d'une icône à partir de son ID
-// Retire le chemin, les 3 premiers caractères ("poi") et l'extension (".png")
-//--------------------------------------------------------------------------------------------------
-function ExtraitNomIcone(pIdImage)
-{
-  let lFullSrc = pid(pIdImage).src;
-  let lFileName = lFullSrc.substring(lFullSrc.lastIndexOf('/') + 1);
-  return(lFileName.slice(4, -4));
-}

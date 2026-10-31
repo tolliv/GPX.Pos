@@ -88,13 +88,7 @@ function AfficherEcranHOME()
   let lNbReq = 0;
 
   // Gestion du nombre de requêtes en cours
-  const lReq = localStorage.getItem('RequetesGPX.Pos');
-  if (lReq != null)
-  {
-    lNbReq = CompteRequetes(lReq);
-  }
-  else
-    lNbReq = 0;
+  lNbReq = CountFIFO();
 
   // Il y a des requêtes à envoyer (donc bouton rouge)
   if (lNbReq > 0)

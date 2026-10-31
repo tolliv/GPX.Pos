@@ -2,23 +2,13 @@
 // CODE Pour écran REQUETES
 //=======================================================
 
-let gStatusRequete = 99;
-let gHtmlText = "";
-
 //-------------------------------------------------------
 // Afficher l'écran scrReq
 //-------------------------------------------------------
 function AfficherEcranREQ()
 {
   // Compte le nombre de requêtes mémorisées
-  let lReq = localStorage.getItem('RequetesVisuGPX');
-  let lNbReq = 0;
-  if (lReq != null)
-  {
-    lNbReq = CompteRequetes(lReq); // TODO
-  }
-  else
-    lNbReq = 0;
+  let lNbReq = CountFIFO();
 
   // Il y a des requêtes à envoyer
   if (lNbReq > 0)
@@ -42,26 +32,12 @@ function AfficherEcranREQ()
   pid('scrReq').style.display = 'block';
 }
 
-//-------------------------------------------------------
-// Compte le nombre de requêtes
-//-------------------------------------------------------
-function CompteRequetes(pRequetes)
-{
-  let lNbReq = 0;
-  for (const lCar of pRequetes)
-  {
-    if (lCar === "¶")
-      lNbReq++;
-  }
-  return(lNbReq);
-}
-
 //--------------------------------------------------------------------------------------------------
 // Demande d'effacement des requêtes
 //--------------------------------------------------------------------------------------------------
 function ButClearRequetesClicked()
 {
-  localStorage.setItem('RequetesVisuGPX', "");
+  localStorage.setItem(STORAGE_KEY_FIFO, "");
 
   // On réaffiche l'écran pour la gestion du texte et des boutons
   AfficherEcranREQ();
@@ -69,6 +45,7 @@ function ButClearRequetesClicked()
 
 //--------------------------------------------------------------------------------------------------
 // Envoi des requêtes mémorisées
+// Fonction qui ressemble à EnvoiRequetesFIFO() sauf qu'elle n'affiche pas les steps
 //--------------------------------------------------------------------------------------------------
 async function ButEnvoiRequetesClicked()
 {
@@ -85,46 +62,24 @@ async function ButEnvoiRequetesClicked()
   else
   {
     // Compte le nombre de requêtes mémorisées
-    let lReq = localStorage.getItem('RequetesVisuGPX');
-    let lNbReq = 0;
-    if (lReq != null)
-    {
-      lNbReq = CompteRequetes(lReq);
-    }
-    else
-      lNbReq = 0;
+    let lNbReq = CountFIFO();
 
     // S'il y a des requêtes à envoyer
     if (lNbReq > 0)
     {
-      // Diviser les requêtes si elles sont concaténées avec "¶" comme séparateur
-      const requetesArray = lReq.split("¶").filter(req => req.trim() !== '');
-
       //----- Boucle sur toutes les requêtes mémorisées -----
       let lRequetesEnvoyees = 0;
-      for (const singleReq of requetesArray)
+      for (let n = 1; n <= lNbReq; n++)
       {
-        // S'assurer que c'est une URL valide
-        if (singleReq.startsWith("https://www.visugpx.com/"))
-        {
-          // Fetch
-          FetchCors(singleReq);
+          const singleReq = PeekFIFO();   // Lecture sans suppression
+          const lRet = await EnvoiSingleRequete(singleReq);
 
-          // Boucle d'attente
-          for (let lCount = 0; lCount < 50; lCount++)
+          // Vérifie la valeur de retour. Si OK, on supprime
+          if (lRet == "OK")
           {
-            await sleep(200);
-            if (gStatusRequete < 50)
-              break;
-          }
-
-          // Vérifie la valeur de retour
-          if (gStatusRequete == 0)
-          {
-          if (gHtmlText.startsWith("Succes"))
             lRequetesEnvoyees++;
+            PopFIFO();
           }
-        }
       }
 
       // Statut après toutes les requêtes envoyées
@@ -134,9 +89,6 @@ async function ButEnvoiRequetesClicked()
         pid('BarreReqHaut').style.color = 'black';
         pid('TxtReqNb').innerHTML = "Aucune requête à envoyer";
         pid('DivRequetes').style.display = 'none';
-
-        // Toutes envoyées donc on efface la mémoire
-        localStorage.setItem('RequetesVisuGPX', "");
       }
 
       // Au moins une erreur, on n'efface par le buffer, tant pis pour les doublons
@@ -144,12 +96,7 @@ async function ButEnvoiRequetesClicked()
       {
         const lErreurs = lNbReq - lRequetesEnvoyees;
         pid('TxtEnvoiRequetesStatut').innerHTML += S("<b>", lErreurs, "</b> Erreur") + "<br>";
-        if (gHtmlText.startsWith("Err: Fichier non trouvé"))
-          pid('TxtEnvoiRequetesStatut').innerHTML += "<i>Vérifier l'ID VisuGPX</i>";
-        else if (gHtmlText.startsWith("Err: La trace doit être cachée"))
-          pid('TxtEnvoiRequetesStatut').innerHTML += "<i>Modifier le type de la trace en 'Cachée'</i>";
-        else
-          pid('TxtEnvoiRequetesStatut').innerHTML += "<i>" + gHtmlText + "</i>";
+        // TODO afficher les erreurs rencontrées
       }
     }
 
@@ -167,7 +114,7 @@ async function ButEnvoiRequetesClicked()
 //--------------------------------------------------------------------------------------------------
 // Envoi des requêtes à partir du FIFO
 //--------------------------------------------------------------------------------------------------
-async function EnvoiRequetes()
+async function EnvoiRequetesFIFO()
 {
     let lConnecte = IsConnected();
 
@@ -211,7 +158,7 @@ async function EnvoiRequetes()
             {
                 pid("Step3").style.backgroundColor = ColOK;
                 pid('TxtStep3').innerHTML = "<b>Envoi</b><br>"
-                pid('TxtStep3').innerHTML += S("<b>", lNbReq, "</b> requête") + S(" ", lNbReq, " envoyée") + "<br>";
+                pid('TxtStep3').innerHTML += S("<b>", lNbReq, "</b> requête") + (lNbReq>1?" envoyées":" envoyée") + "<br>";
 
                 // Chargement du bulletin météo
                 pid("Step4").style.backgroundColor = ColEnCours;;
@@ -234,6 +181,7 @@ async function EnvoiRequetes()
                 pid("Step3").style.backgroundColor = ColErreur;
                 pid('TxtStep3').innerHTML = "<b>Envoi</b><br>";
                 pid('TxtStep3').innerHTML += S("<b>", lErreurs, "</b> Erreur") + "<br>";
+                // TODO afficher les erreurs rencontrées
             }
         }
 
@@ -245,33 +193,6 @@ async function EnvoiRequetes()
             pid('TxtStep3').innerHTML += "Aucune requête à envoyer";
         }
     }
-}
-
-
-//--------------------------------------------------------------------------------------------------
-// Fetch en mode CORS pour récuperer le contenu d'une URL
-// Si < 50, alors erreur et on arrête
-//--------------------------------------------------------------------------------------------------
-async function FetchCors(url)
-{
-  gStatusRequete = 99;
-  try {
-    const response = await fetch(url, { method: 'GET', mode: 'cors' });
-
-    if (!response.ok)
-    {
-      gStatusRequete = 1;
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    gStatusRequete = 98;
-    gHtmlText = await response.text(); // Attend que le texte soit lu
-    gStatusRequete = 0;
-  }
-  catch (error)
-  {
-    gStatusRequete = 2;
-  }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -402,12 +323,7 @@ function CountFIFO()
 //--------------------------------------------------------------------------------------------------
 async function EnvoiSingleRequete(nouveauPoint)
 {
-  console.log("Ecriture en cours");
-  const t0 = performance.now();
-
   // Ecriture
   const lStatus = await SupabaseWrite(nouveauPoint);
-  const delta = Math.round(0.100*(performance.now() - t0))/100;
-  console.log("Ecriture " + lStatus + " (" + delta + "s)");
   return(lStatus);
 }
